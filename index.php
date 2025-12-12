@@ -7,7 +7,9 @@
 
 	require("connect.php");
 
-	$select = "SELECT p.nome FROM participantes p LEFT JOIN nomes n ON p.nome = n.usuario WHERE n.usuario IS NULL";
+	$id_grupo = $_GET['id_grupo'];
+
+	$select = "SELECT p.nome, p.id_grupo FROM participantes p LEFT JOIN nomes n ON p.nome = n.usuario WHERE n.usuario IS NULL AND p.id_grupo = '$id_grupo'";
 
 	$action = $conn->query($select);
 	$dados = [];	
@@ -39,22 +41,16 @@
 <body>
 	<label for="nomes">Quem é Você?</label><br>
 	<br>
-	<form name="fnome" method="POST" action="sorteio.php">
+	<form name="fnome" method="POST" action="sorteio.php?id_grupo='<?php echo $id_grupo;?>'">
 		<select name="nomes" id="nomes">
 			<?php 
 				while($linha = $action->fetch_assoc()){
 					?>
-					<option value="<?php echo $linha['nome']?>"><?php echo $linha['nome']?></option>
+					<option value="<?php echo $linha['nome'];?>"><?php echo $linha['nome'];?></option>
 					<?php
 				}
 
 			?>
-
-
-			<!--<option value="nome1">Nome 1</option>
-			<option value="nome2">Nome 2</option>
-			<option value="nome3">Nome 3</option>
-			<option value="nome4">Nome 4</option>-->
 		</select>
 		<br>
 		<br>

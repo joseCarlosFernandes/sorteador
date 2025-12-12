@@ -4,7 +4,7 @@
 	// Verifica se o resultado já foi mostrado nesta sessão
 	if(isset($_SESSION['resultado_mostrado'])) {
 	    // Já mostrou → redireciona para página inicial
-	    header("Location: index.php");
+	    header("Location: final.php");
 	    exit;
 	}
 
@@ -12,13 +12,13 @@
 	$_SESSION['resultado_mostrado'] = true;
 
 	require("connect.php");
-
+	$id_grupo = $_GET['id_grupo'];
 	$usuario = $_POST['nomes'];
 	if(empty($usuario)){
-		header("Location: index.php");
+		header("Location: erro.php");
 	}
 
-	$select = "SELECT id, nome FROM nomes WHERE sorteado = '0' AND nome != '$usuario'";
+	$select = "SELECT id, nome FROM nomes WHERE id_grupo = $id_grupo AND nome != '$usuario' AND sorteado = 0";
 	$action = $conn->query($select);
 
 	//array de nomes
@@ -28,6 +28,7 @@
 		$nomes[] = $linha;
 
 	}
+	//var_dump($nomes);
 	if(empty($nomes)){
 		$sorteado = [
 		    "id" => 00,
@@ -75,7 +76,7 @@
 		}
 
 		btn_sair.addEventListener("click", function(s){
-			window.location.href = "index.php";
+			window.location.href = "final.php";
 		})
 
 	</script>
